@@ -1,9 +1,6 @@
-package com.example.recipeapp.network.Food2ForkDTO
+package com.example.recipeapp.Repository.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class SearchResultDTO(
+data class SearchRecipeEntity (
     val cooking_instructions: String?,
     val date_added: String,
     val date_updated: String,
@@ -17,4 +14,4 @@ data class SearchResultDTO(
     val rating: Int,
     val source_url: String,
     val title: String
-)
+        )
