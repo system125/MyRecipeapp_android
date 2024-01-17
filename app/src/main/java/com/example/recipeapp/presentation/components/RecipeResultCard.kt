@@ -1,12 +1,16 @@
 package com.example.recipeapp.presentation.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,6 +20,27 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.recipeapp.R
+
+//@Composable
+//fun RecipeResultCard(
+//    recipeCardState: RecipeResultCardState,
+//    onClickFunction: (id: Int) -> Unit
+//){
+//    var visible by remember{ mutableStateOf(true)}
+//    AnimatedVisibility(
+//        visible =true,
+//        enter = fadeIn(
+//            animationSpec= tween(durationMillis = 2000),
+//            initialAlpha = 0.1f
+//        )
+//    ) {
+//        _recipeResultCard(
+//            recipeCardState = recipeCardState,
+//            onClickFunction = onClickFunction
+//        )
+//    }
+//
+//}
 
 @Composable
 fun RecipeResultCard (
@@ -59,7 +84,9 @@ fun RecipeResultCard (
                 recipeCardState.description,
                 style = MaterialTheme.typography.bodyLarge
             )
-            Row(modifier=Modifier.fillMaxWidth().padding(top = 8.dp),
+            Row(modifier= Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Icon(

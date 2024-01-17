@@ -18,6 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.recipeapp.presentation.components.RecipeResultCard
+import com.example.recipeapp.presentation.searchScreen.searchscreenstates.LoadingWidget
+import com.example.recipeapp.presentation.searchScreen.searchscreenstates.NoWifiWidget
+import com.example.recipeapp.presentation.searchScreen.searchscreenstates.SearchEntryNotFoundWidget
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,20 +33,25 @@ fun SearchScreen (searchScreenViewModel:SearchScreenViewModel){
             singleLine = true
         )
 
-
-        LazyColumn{
-            items(searchScreenViewModel.searchResultState){item->
-                RecipeResultCard(
-                    recipeCardState = item,
-                    onClickFunction = searchScreenViewModel::onCardClicked
-                )
-            }
-
-
+        when(searchScreenViewModel.searchScreenState){
+            is SearchScreenState.Loading -> LoadingWidget()
+            is SearchScreenState.NetworkError -> Text("Network Error!")
+            is SearchScreenState.NoWifi -> NoWifiWidget()
+            is SearchScreenState.RecipeNotFound -> SearchEntryNotFoundWidget()
+            is SearchScreenState.Success -> RecipeList(
+                searchScreenViewModel.searchResultState,
+                searchScreenViewModel::onCardClicked
+            )
         }
-        
+
+
+
+
+
     }
+        
 }
+
 
 
 

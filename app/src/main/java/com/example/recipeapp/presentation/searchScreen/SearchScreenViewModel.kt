@@ -27,6 +27,7 @@ class SearchScreenViewModel @Inject constructor(
 ):ViewModel () {
     val searchResultState = mutableStateListOf<RecipeResultCardState>()
     var searchTextValue by mutableStateOf("")
+    var searchScreenState:SearchScreenState by mutableStateOf(SearchScreenState.Loading)
 
     private val searchQueryFlow = MutableSharedFlow<String>(
         replay = 1, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
@@ -48,13 +49,19 @@ class SearchScreenViewModel @Inject constructor(
         return searchRepository.getRecipeStates(1,listOf(searchQuery))
             .onEach {recipeState->
                 when(recipeState){
-                    is ResponseStatus.Success -> searchResultState.add(recipeState.response)
-                    is ResponseStatus.Loading -> Log.d("Debug","Loading state...")
+                    is ResponseStatus.Success -> {
+                        searchScreenState = SearchScreenState.Success
+                        searchResultState.add(recipeState.response)
+                    }
+                    is ResponseStatus.Loading -> SearchScreenState.Loading
                     is ResponseStatus.Failure -> {
                         when(recipeState.networkError){
-                            is NetworkError.HttpError -> Log.d("Debug","Error! ${recipeState.networkError.errorMessage}")
-                            is NetworkError.QueryNotFound -> Log.d("Debug","yQuery Not Found")
-                            is NetworkError.NoInternetError -> Log.d("Debug","Error! Network Not Found!")
+                            is NetworkError.HttpError ->
+                                SearchScreenState.NetworkError(
+                                    recipeState.networkError.errorMessage
+                                )
+                            is NetworkError.QueryNotFound -> SearchScreenState.RecipeNotFound
+                            is NetworkError.NoInternetError -> SearchScreenState.NoWifi
                         }
                     }
                 }
